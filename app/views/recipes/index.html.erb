@@ -1,0 +1,33 @@
+<h1>What’s in your fridge today?</h1>
+
+<%= form_with url: recipes_path, method: :get do |form| %>
+  <div>
+    <%= form.label :ingredients, "Ingredients (comma separated, e.g. flour 2, sugar, eggs)" %>
+    <%= form.text_field :ingredients %>
+  </div>
+  <div>
+    <%= form.label :total_time, "Max total cooking time in minutes" %>
+    <%= form.number_field :total_time %>
+  </div>
+  <%= form.submit "Search" %>
+<% end %>
+
+<h3>Recipes that only use ingredients from list: </h1>
+<ul>
+  <% @recipes_only_user_ingredients.each do |recipe| %>
+    <li>
+      <%= link_to recipe.title, recipe %>
+      (<%= recipe.cuisine %> - <%= recipe.category %> - Total time: <%= recipe.prep_time.to_i + recipe.cook_time.to_i %> min)
+    </li>
+  <% end %>
+</ul>
+
+<h3>Recipes that match at least one ingredient but not fully included above: </h1>
+<ul>
+  <% @recipes_partial_match.each do |recipe| %>
+    <li>
+      <%= link_to recipe.title, recipe %>
+      (<%= recipe.cuisine %> - <%= recipe.category %> - Total time: <%= recipe.prep_time.to_i + recipe.cook_time.to_i %> min)
+    </li>
+  <% end %>
+</ul>

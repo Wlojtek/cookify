@@ -5,12 +5,10 @@ class CreateRecipesAndIngredients < ActiveRecord::Migration[8.0]
       t.integer :cook_time
       t.integer :prep_time
       t.float :ratings
-      t.string :cuisine
       t.string :category
       t.string :meal_type
       t.string :author
       t.string :image_url
-      t.text :instructions # optional if you’ll store steps here
       t.timestamps
     end
 
@@ -27,7 +25,6 @@ class CreateRecipesAndIngredients < ActiveRecord::Migration[8.0]
       t.string :raw_text # full original string from JSON
       t.float :quantity  # parsed numeric quantity
       t.string :unit     # standardized unit (cup, tbsp, clove, etc.)
-      t.string :preparation # e.g., "minced", "chopped"
 
       t.timestamps
     end

@@ -1,0 +1,24 @@
+<h1><%= @recipe.title %></h1>
+
+<p><strong>Category:</strong> <%= @recipe.category %></p>
+<p><strong>Meal Type:</strong> <%= @recipe.meal_type %></p>
+<p><strong>Author:</strong> <%= @recipe.author %></p>
+<p><strong>Prep Time:</strong> <%= @recipe.prep_time %> minutes</p>
+<p><strong>Cook Time:</strong> <%= @recipe.cook_time %> minutes</p>
+<p><strong>Ratings:</strong> <%= @recipe.ratings %></p>
+
+<% if @recipe.image_url.present? %>
+  <p><img src="<%= @recipe.image_url %>" alt="<%= @recipe.title %>"></p>
+<% end %>
+
+<p><strong>Instructions:</strong></p>
+<p><%= @recipe.instructions %></p>
+
+<h2>Ingredients</h2>
+<ul>
+  <% @recipe.recipe_ingredients.each do |ingredient| %>
+    <li><%= ingredient.raw_text %></li>
+  <% end %>
+</ul>
+
+<%= link_to 'Back to Recipes', recipes_path %>

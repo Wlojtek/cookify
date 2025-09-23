@@ -24,6 +24,8 @@ RSpec.feature "Recipes search", type: :feature do
     recipe = create(:recipe, title: "Partial Match Bread 2", ratings: 4.0, category: "Bread")
     create(:recipe_ingredient, recipe: recipe, ingredient: flour, raw_text: "3 cups flour")
     create(:recipe_ingredient, recipe: recipe, ingredient: butter, raw_text: "1/2 cup butter")
+    create(:recipe_ingredient, recipe: recipe, ingredient: butter, raw_text: "1/3 cup butter")
+    create(:recipe_ingredient, recipe: recipe, ingredient: butter, raw_text: "1/3 cup sugar")
     recipe
   end
 
@@ -40,7 +42,7 @@ RSpec.feature "Recipes search", type: :feature do
     fill_in "total_time", with: "60"
     click_button "Search"
 
-    expect(page).to have_content("Recipes that only use ingredients from fridge:")
+    expect(page).to have_content("Recipes that only use ingredients from your fridge:")
 
     within "#fully-match-recipes" do
       expect(page).to have_content("Full Match Cake")
@@ -69,9 +71,10 @@ RSpec.feature "Recipes search", type: :feature do
 
     click_link "Matched"
 
-    within "#partially-match-recipes" do
-      expect(page).to have_content("Partial Match Bread")
-      expect(page).to have_content("Partial Match Bread 2")
+    within "#partially-match-recipes tbody" do
+      rows = all('tr')
+      expect(rows[1]).to have_content("Partial Match Bread 2")
+      expect(rows[0]).to have_content("Partial Match Bread")
     end
   end
 end

@@ -16,7 +16,8 @@ FRACTION_MAP = {
   "¾" => 0.75,
   "⅓" => 1.0/3,
   "⅔" => 2.0/3,
-  "⅛" => 0.125
+  "⅛" => 0.125,
+  "⅞" => 0.875
 }
 
 
@@ -40,7 +41,7 @@ def parse_ingredient(line)
   # Regex updated to support mixed numbers, unicode fractions, decimals
   match = line.match(
     /
-      (?<quantity>[\d¼½¾⅓⅔⅛\/\.]+\s*[\d¼½¾⅓⅔⅛]*)?   # quantity: number, fraction, mixed number
+      (?<quantity>[\d#{Regexp.escape(FRACTION_MAP.keys.join)}\/\.]+\s*[\d#{Regexp.escape(FRACTION_MAP.keys.join)}]*)?   # quantity: number, fraction, mixed number
       \s*
       (?<unit>[a-zA-Z]+)?                             # unit
       \s*
@@ -69,11 +70,9 @@ recipes_data.each do |r|
     cook_time: r["cook_time"],
     prep_time: r["prep_time"],
     ratings: r["ratings"],
-    cuisine: r["cuisine"],
     category: r["category"],
     author: r["author"],
     image_url: r["image"],
-    instructions: r["instructions"] || ""
   )
 
   r["ingredients"].each do |line|
@@ -90,7 +89,6 @@ recipes_data.each do |r|
       raw_text: line,
       quantity: parsed[:quantity],
       unit: parsed[:unit],
-      preparation: parsed[:preparation]
     )
   end
 end

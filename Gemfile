@@ -62,4 +62,14 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+
+  gem "rspec-rails"
+  gem "factory_bot_rails"
+  gem "capybara-screenshot"
 end
+
+gem "dockerfile-rails", ">= 1.7", group: :development
+
+gem "litestream", "~> 0.14.0"
+
+gem "aws-sdk-s3", "~> 1.199", require: false

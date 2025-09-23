@@ -11,9 +11,6 @@
   <p><img src="<%= @recipe.image_url %>" alt="<%= @recipe.title %>"></p>
 <% end %>
 
-<p><strong>Instructions:</strong></p>
-<p><%= @recipe.instructions %></p>
-
 <h2>Ingredients</h2>
 <ul>
   <% @recipe.recipe_ingredients.each do |ingredient| %>

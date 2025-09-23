@@ -2,32 +2,64 @@
 
 <%= form_with url: recipes_path, method: :get do |form| %>
   <div>
-    <%= form.label :ingredients, "Ingredients (comma separated, e.g. flour 2, sugar, eggs)" %>
+    <%= form.label :ingredients, "Ingredients (comma separated, e.g. flour, sugar, eggs)" %>
     <%= form.text_field :ingredients %>
   </div>
   <div>
-    <%= form.label :total_time, "Max total cooking time in minutes" %>
+    <%= form.label :total_time, "How much time do you have? (in minutes)" %>
     <%= form.number_field :total_time %>
   </div>
   <%= form.submit "Search" %>
 <% end %>
 
-<h3>Recipes that only use ingredients from list: </h1>
-<ul>
-  <% @recipes_only_user_ingredients.each do |recipe| %>
-    <li>
-      <%= link_to recipe.title, recipe %>
-      (<%= recipe.cuisine %> - <%= recipe.category %> - Total time: <%= recipe.prep_time.to_i + recipe.cook_time.to_i %> min)
-    </li>
-  <% end %>
-</ul>
+<h3>Recipes that only use ingredients from your fridge: </h3>
+<table id="fully-match-recipes" border="1">
+  <thead>
+    <tr>
+      <th><%= link_to 'Rank', recipes_path(params.permit(:ingredients, :total_time).merge(sort_by: 'rank')) %></th>
+      <th>Title</th>
+      <th>Matched</th>
+      <th>Missing</th>
+      <th>Category</th>
+      <th>Total Time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @recipes_only_user_ingredients.each do |recipe| %>
+      <tr>
+        <td><%= recipe.ratings %></td>
+        <td><%= link_to recipe.title, recipe %></td>
+        <td><%= recipe[:matched_ingredients] %></td>
+        <td><%= recipe[:missing_ingredients] %></td>
+        <td><%= recipe.category %></td>
+        <td><%= recipe.prep_time.to_i + recipe.cook_time.to_i %> min</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
 
-<h3>Recipes that match at least one ingredient but not fully included above: </h1>
-<ul>
-  <% @recipes_partial_match.each do |recipe| %>
-    <li>
-      <%= link_to recipe.title, recipe %>
-      (<%= recipe.cuisine %> - <%= recipe.category %> - Total time: <%= recipe.prep_time.to_i + recipe.cook_time.to_i %> min)
-    </li>
-  <% end %>
-</ul>
+<h3>Most Cookable Meal recipes (at least one ingredient matched): </h3>
+<table id="partially-match-recipes" border="1">
+  <thead>
+    <tr>
+      <th><%= link_to 'Rank', recipes_path(params.permit(:ingredients, :total_time).merge(sort_by: 'rank')) %></th>
+      <th>Title</th>
+      <th><%= link_to 'Matched', recipes_path(params.permit(:ingredients, :total_time).merge(sort_by: 'matched')) %></th>
+      <th><%= link_to 'Missing', recipes_path(params.permit(:ingredients, :total_time).merge(sort_by: 'missing')) %></th>
+      <th>Category</th>
+      <th>Total Time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @recipes_partial_match.each do |recipe| %>
+      <tr>
+        <td><%= recipe.ratings %></td>
+        <td><%= link_to recipe.title, recipe %></td>
+        <td><%= recipe[:matched_ingredients] %></td>
+        <td><%= recipe[:missing_ingredients] %></td>
+        <td><%= recipe.category %></td>
+        <td><%= recipe.prep_time.to_i + recipe.cook_time.to_i %> min</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
